@@ -30,4 +30,12 @@ public class Book {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        int result = author != null ? author.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + pages;
+        return result;
+    }
 }

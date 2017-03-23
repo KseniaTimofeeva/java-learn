@@ -1,48 +1,50 @@
 package objects;
 
-import java.util.Arrays;
-
 /**
  * Created by ksenia on 21.03.2017.
  */
 public class Library {
     private int qtyAllBooks;
-    Book[] books;
-    int[] qtyBook;
+    LinkedList[] bookLinkedList;
 
     public Library(int qtyAllBooks) {
         this.qtyAllBooks = qtyAllBooks;
-        books = new Book[qtyAllBooks];          //каждой книге соответствует индекс
-        qtyBook = new int[qtyAllBooks];         //каждому индексу соответствует кол-во в библиотеке
+        bookLinkedList = new LinkedList[qtyAllBooks];
     }
 
-    public void put(Book book, int qty) {
+    //вернуть в библиотеку
+    public void returnBook(Book book, int qty) {
         if (book != null) {
-            for (int i = 0; i < books.length; i++) {
-                if (books[i].equals(book)) {
-                    qtyBook[i] += qty;
-                    return;
-                }
-            }
-            System.out.println("Книга не из библиотеки");
+            int availableQty = this.get(book);
+            put(book, availableQty + qty);
+            System.out.println("Принятых книг: " + qty);
         }
     }
 
-    public int get(Book book, int qty) {
+    //    устанавливает новое значение qty у соотв книги в библиотеке
+    public void put(Book book, int qty) {
         if (book != null) {
-            for (int i = 0; i < books.length; i++) {
-                if (books[i].equals(book)) {
-                    if (qtyBook[i] >= qty) {
-                        qtyBook[i] -= qty;
-                        return qty;
-                    } else {
-                        int temp = qtyBook[i];
-                        qtyBook[i] = 0;
-                        return temp;
-                    }
-                }
+            int hc = Math.abs(book.hashCode()) % bookLinkedList.length;
+            bookLinkedList[hc].setValue(book, qty);
+        }
+    }
+
+    public int get(Book book) {
+        int hc = Math.abs(book.hashCode()) % bookLinkedList.length;
+        return bookLinkedList[hc].get(book);
+    }
+
+    //взять из библиотеки
+    public int giveBook(Book book, int qty) {
+        if (book != null) {
+            int availableQty = this.get(book);
+            if (availableQty >= qty) {
+                this.put(book, availableQty - qty);
+                return qty;
+            } else {
+                this.put(book, 0);
+                return availableQty;
             }
-            return -1;
         } else {
             return -1;
         }

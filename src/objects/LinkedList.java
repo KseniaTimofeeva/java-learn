@@ -12,9 +12,8 @@ public class LinkedList {
         return size;
     }
 
-    public void add(String addVal) {
-        Item item = new Item();
-        item.value = addVal;
+    public void add(Book addKey, int addValue) {
+        Item item = new Item(addKey, addValue);
         if (head == null) {
             head = item;
             last = item;
@@ -25,21 +24,43 @@ public class LinkedList {
         size++;
     }
 
-    public String get(int index) {
+    public void setValue(Book key, int setValue) {
         if (head != null) {
-            int i = 0;
             Item item = head;
 
-            while ( item!= null) {
-                if (i == index) {
+            boolean isSet = false;
+            while (item != null) {
+                if (key.equals(item.key)) {
+                    item.value = setValue;
+                    isSet = true;
+                }
+                item = item.next;
+            }
+            if (!isSet) {
+                System.out.println("Key doesn't exist");
+            }
+        } else {
+            System.out.println("key doesn't exist");
+        }
+    }
+
+    public int get(Book key) {
+        if (head != null) {
+//            int i = 0;
+            Item item = head;
+
+            while (item != null) {
+                if (key.equals(item.key)) {
                     return item.value;
                 }
                 item = item.next;
-                i++;
+//                i++;
             }
-            throw new IndexOutOfBoundsException(index + " from " + (i - 1));
+//            throw new IndexOutOfBoundsException(index + " from " + (i - 1));
+            return -1;
         } else {
-            throw new IndexOutOfBoundsException(index + " from 0");
+//            throw new IndexOutOfBoundsException(index + " from 0");
+            return -1;
         }
     }
 
