@@ -3,7 +3,7 @@ package objects.shapes;
 /**
  * Created by ksenia on 22.03.2017.
  */
-public class Rectangle extends Shape{
+public class Rectangle implements Shape{
     private int a;
     private int b;
 

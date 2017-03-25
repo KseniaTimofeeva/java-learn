@@ -10,9 +10,9 @@ public class TestAccumulator {
         System.out.println(accumulator1.calculate(15));
         System.out.println(accumulator1.getValue());
 
-        Accumulator accumulator2 = new Accumulator(0, new Minus());
-        System.out.println(accumulator2.calculate(10.5));
-        System.out.println(accumulator2.calculate(15.5));
+        Accumulator accumulator2 = new Accumulator(1, new Mult());
+        System.out.println(accumulator2.calculate(2.5));
+        System.out.println(accumulator2.calculate(2.0));
         System.out.println(accumulator2.getValue());
     }
 }

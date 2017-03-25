@@ -3,7 +3,7 @@ package objects.accumulator;
 /**
  * Created by ksenia on 22.03.2017.
  */
-public class Plus extends Operation {
+public class Plus implements Operation {
 
     @Override
     public int apply(int a, int b) {

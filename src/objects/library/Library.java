@@ -1,4 +1,4 @@
-package objects;
+package objects.library;
 
 /**
  * Created by ksenia on 21.03.2017.

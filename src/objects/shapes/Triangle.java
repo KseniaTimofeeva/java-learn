@@ -3,7 +3,7 @@ package objects.shapes;
 /**
  * Created by ksenia on 22.03.2017.
  */
-public class Triangle extends Shape {
+public class Triangle implements Shape {
     private int a;
     private int b;
     private int c;

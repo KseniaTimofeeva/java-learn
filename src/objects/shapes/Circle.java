@@ -3,7 +3,7 @@ package objects.shapes;
 /**
  * Created by ksenia on 22.03.2017.
  */
-public class Circle extends Shape {
+public class Circle implements Shape {
     private int r;
 
     public Circle(int r) {

@@ -1,4 +1,4 @@
-package objects;
+package objects.library;
 
 /**
  * Created by ksenia on 21.03.2017.
@@ -15,20 +15,15 @@ public class Book {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (obj.getClass() == this.getClass()) {
-            Book book = (Book) obj;
-            if ((book.author).equals(this.author) && (book.title).equals(this.title) && book.pages == this.pages) {
-                return true;
-            }
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (pages != book.pages) return false;
+        if (author != null ? !author.equals(book.author) : book.author != null) return false;
+        return title != null ? title.equals(book.title) : book.title == null;
     }
 
     @Override
