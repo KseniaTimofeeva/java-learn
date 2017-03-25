@@ -6,7 +6,6 @@ import java.util.Iterator;
  * Created by ksenia on 24.03.2017.
  */
 public class LinkedListIterator implements Iterator {
-    Item previous;
     Item next;
 
     public LinkedListIterator(Item head) {

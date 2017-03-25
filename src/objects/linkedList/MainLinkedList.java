@@ -13,9 +13,7 @@ public class MainLinkedList {
             list.add(i);
         }
 
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Object o = iterator.next();
+        for (Object o : list) {
             System.out.print(o + " ");
         }
         System.out.println();
@@ -25,13 +23,10 @@ public class MainLinkedList {
 //        System.out.println(list.get(15));
         System.out.println();
 
-        list.remove(9);
-        list.remove(5);
-        list.remove(0);
+        System.out.print(list.remove(9) + " " + list.remove(5) + " " + list.remove(0));
+        System.out.println();
 
-        iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Object o = iterator.next();
+        for (Object o : list) {
             System.out.print(o + " ");
         }
         System.out.println();

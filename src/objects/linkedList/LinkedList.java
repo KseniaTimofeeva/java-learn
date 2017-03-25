@@ -27,15 +27,19 @@ public class LinkedList implements Stack, List{
     }
 
     @Override
-    public void add(Object value) {
+    public boolean add(Object value) {
+        boolean isSet = false;
         Item item = new Item(value);
         if (head == null) {
             head = item;
             last = item;
+            isSet = true;
         } else {
             last.next = item;
             last = item;
+            isSet = true;
         }
+        return isSet;
     }
 
     @Override
