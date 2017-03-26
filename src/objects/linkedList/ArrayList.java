@@ -48,7 +48,7 @@ public class ArrayList implements List {
     private void grow(int capacity) {
         Object[] oldData = new Object[capacity];
         System.arraycopy(elementData, 0, oldData, 0, capacity);
-        capacity = (capacity * 3) / 2 + 1;
+        capacity *= 2;
         elementData = new Object[capacity];
         System.arraycopy(oldData, 0, elementData, 0, oldData.length);
     }

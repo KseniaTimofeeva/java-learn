@@ -8,5 +8,5 @@ public interface Operation {
 
     public double apply(double a1, double a2);
 
-    public long apply(long a, long b);
+    public long apply(long a1, long a2);
 }
