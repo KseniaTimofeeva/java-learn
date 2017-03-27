@@ -71,6 +71,7 @@ public class ArrayList implements List {
         if (index >= currentSize || index < 0) {
             return null;
         }
+
         int movedElements = currentSize - index - 1;
         if (movedElements > 0) {
             System.arraycopy(elementData, index + 1, elementData, index, movedElements);
