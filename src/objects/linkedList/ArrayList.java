@@ -16,8 +16,12 @@ public class ArrayList implements List {
     }
 
     public ArrayList(int capacity) {
-        this.capacity = capacity;
-        elementData = new Object[capacity];
+        if (capacity <= 0) {
+            this.capacity = 10;
+        } else {
+            this.capacity = capacity;
+            elementData = new Object[capacity];
+        }
     }
 
     @Override
@@ -31,7 +35,7 @@ public class ArrayList implements List {
     }
 
     public boolean add(int index, Object object) {
-        if (index > currentSize) {
+        if (index > currentSize || index < 0) {
             return false;
         }
         if (!checkCapacity()) {
@@ -55,7 +59,7 @@ public class ArrayList implements List {
 
     @Override
     public Object get(int index) {
-        if (index >= currentSize) {
+        if (index >= currentSize || index < 0) {
             return null;
         } else {
             return elementData[index];
@@ -64,7 +68,7 @@ public class ArrayList implements List {
 
     @Override
     public Object remove(int index) {
-        if (index >= currentSize) {
+        if (index >= currentSize || index < 0) {
             return null;
         }
         int movedElements = currentSize - index - 1;
@@ -82,10 +86,6 @@ public class ArrayList implements List {
     }
 
     private boolean checkCapacity() {
-        if (currentSize < elementData.length) {
-            return true;
-        } else {
-            return false;
-        }
+        return currentSize < elementData.length;
     }
 }
