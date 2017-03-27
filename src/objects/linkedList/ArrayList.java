@@ -50,11 +50,9 @@ public class ArrayList implements List {
     }
 
     private void grow(int capacity) {
-        Object[] oldData = new Object[capacity];
-        System.arraycopy(elementData, 0, oldData, 0, capacity);
-        capacity *= 2;
-        elementData = new Object[capacity];
-        System.arraycopy(oldData, 0, elementData, 0, oldData.length);
+        Object[] newElementData = new Object[capacity * 2];
+        System.arraycopy(elementData, 0, newElementData, 0, elementData.length);
+        elementData = newElementData;
     }
 
     @Override
