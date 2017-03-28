@@ -45,8 +45,7 @@ public class Library {
                 this.put(book, 0);
                 return availableQty;
             }
-        } else {
-            return -1;
         }
+        return -1;
     }
 }

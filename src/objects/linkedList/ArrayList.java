@@ -26,9 +26,7 @@ public class ArrayList implements List {
 
     @Override
     public boolean add(Object object) {
-        if (!checkCapacity()) {
-            grow(capacity);
-        }
+        checkCapacity();
         elementData[currentSize] = object;
         currentSize++;
         return true;
@@ -38,9 +36,7 @@ public class ArrayList implements List {
         if (index > currentSize || index < 0) {
             return false;
         }
-        if (!checkCapacity()) {
-            grow(capacity);
-        }
+        checkCapacity();
         if (index != currentSize) {
             System.arraycopy(elementData, index, elementData, index + 1, currentSize - index);
         }
@@ -49,19 +45,12 @@ public class ArrayList implements List {
         return true;
     }
 
-    private void grow(int capacity) {
-        Object[] newElementData = new Object[capacity * 2];
-        System.arraycopy(elementData, 0, newElementData, 0, elementData.length);
-        elementData = newElementData;
-    }
-
     @Override
     public Object get(int index) {
         if (index >= currentSize || index < 0) {
             return null;
-        } else {
-            return elementData[index];
         }
+        return elementData[index];
     }
 
     @Override
@@ -84,7 +73,42 @@ public class ArrayList implements List {
         return new ArrayListIterator(elementData, currentSize);
     }
 
-    private boolean checkCapacity() {
-        return currentSize < elementData.length;
+    private void checkCapacity() {
+        if (currentSize == elementData.length) {
+            capacity *= 2;
+            Object[] newElementData = new Object[capacity];
+            System.arraycopy(elementData, 0, newElementData, 0, elementData.length);
+            elementData = newElementData;
+        }
+    }
+
+    public static class ArrayListIterator implements Iterator {
+        private Object[] elementData;
+        private int currentSize;
+        private int nextIndex;
+
+        public ArrayListIterator(Object[] elementData, int currentSize) {
+            this.elementData = elementData;
+            this.currentSize = currentSize;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nextIndex < currentSize;
+        }
+
+        @Override
+        public Object next() {
+            if (!hasNext()) {
+                return null;
+            }
+            int n = nextIndex;
+            nextIndex++;
+            return elementData[n];
+        }
+
+        @Override
+        public void remove() {
+        }
     }
 }

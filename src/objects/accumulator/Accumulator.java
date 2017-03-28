@@ -27,7 +27,7 @@ public class Accumulator {
     }
 
     public int calculate(int a) {
-        value = operation.apply(value, a);
+        value = operation.apply((int)value, a);
         return (int) value;
     }
 
@@ -37,7 +37,7 @@ public class Accumulator {
     }
 
     public long calculate(long a) {
-        value = operation.apply(value, a);
+        value = operation.apply((long)value, a);
         return (long) value;
     }
 

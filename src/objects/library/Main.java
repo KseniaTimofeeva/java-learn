@@ -14,15 +14,13 @@ public class Main {
             int hc = Math.abs(book.hashCode()) % library.bookLinkedList.length;
             if (library.bookLinkedList[hc] == null) {
                 library.bookLinkedList[hc] = new LinkedList();
-                library.bookLinkedList[hc].add(book, i);
-            } else {
-                library.bookLinkedList[hc].add(book, i);
             }
+            library.bookLinkedList[hc].add(book, i);
         }
 
         for (int i = 0; i < 15; i++) {
             Book book = new Book(i + "", i + "", i);
-            System.out.println(library.get(book));
+            System.out.println(book.toString());
         }
         System.out.println();
 
@@ -31,8 +29,9 @@ public class Main {
 
         for (int i = 0; i < 15; i++) {
             Book book = new Book(i + "", i + "", i);
-            System.out.println(library.get(book));
+            System.out.print(library.get(book) + " ");
         }
+        System.out.println();
         System.out.println();
 
         System.out.println("Выдано книг : " + library.giveBook(new Book("0", "0", 0), 3));
@@ -42,8 +41,8 @@ public class Main {
 
         for (int i = 0; i < 15; i++) {
             Book book = new Book(i + "", i + "", i);
-            System.out.println(library.get(book));
+            System.out.print(library.get(book) + " ");
         }
-
+        System.out.println();
     }
 }

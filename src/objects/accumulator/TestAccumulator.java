@@ -25,8 +25,27 @@ public class TestAccumulator {
         System.out.println(accumulator3.getValue());
         System.out.println();
 
-        Accumulator accumulator4 = new Accumulator(new int[]{0, 0, 3, 3}, new Operation[]{new Plus(), new Minus(), new Pow(), new Mult()});
+        Accumulator accumulator4 = new Accumulator(new int[]{0, 0, 3, 3}, new Operation[]{new Plus(), new Plus(), new Pow(), new Mult()});
         System.out.println(Arrays.toString(accumulator4.calculateArray(2)));
         System.out.println(Arrays.toString(accumulator4.calculateArray(2)));
+        System.out.println();
+
+        Accumulator accumulator5 = new Accumulator(-8, new Operation() {
+            @Override
+            public int apply(int a1, int a2) {
+                return a1 - a2;
+            }
+
+            @Override
+            public double apply(double a1, double a2) {
+                return a1 - a2;
+            }
+
+            @Override
+            public long apply(long a1, long a2) {
+                return a1 - a2;
+            }
+        });
+        System.out.println(accumulator5.calculate(3.0));
     }
 }

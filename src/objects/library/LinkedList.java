@@ -58,10 +58,9 @@ public class LinkedList {
             }
 //            throw new IndexOutOfBoundsException(index + " from " + (i - 1));
             return -1;
-        } else {
-//            throw new IndexOutOfBoundsException(index + " from 0");
-            return -1;
         }
+//            throw new IndexOutOfBoundsException(index + " from 0");
+        return -1;
     }
 
     public void remove(int index) {
@@ -85,8 +84,18 @@ public class LinkedList {
                 i++;
             }
             throw new IndexOutOfBoundsException(index + " from " + (i - 1));
-        } else {
-            throw new IndexOutOfBoundsException(index + " from 0");
+        }
+        throw new IndexOutOfBoundsException(index + " from 0");
+    }
+
+    private static class Item {
+        Book key;
+        int value;
+        Item next; //ссылка на следующий элемент списка
+
+        Item(Book key, int value) {
+            this.key = key;
+            this.value = value;
         }
     }
 }

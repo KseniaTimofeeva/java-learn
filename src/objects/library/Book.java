@@ -33,4 +33,10 @@ public class Book {
         result = 31 * result + pages;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "{" + author + ", " + title + ", " + pages + "}";
+    }
+
 }

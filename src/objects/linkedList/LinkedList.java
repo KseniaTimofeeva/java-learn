@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * Created by ksenia on 20.03.2017.
  */
-public class LinkedList implements Stack, List{
+public class LinkedList implements Stack, List {
     Item head;
     Item last;
 
@@ -28,18 +28,14 @@ public class LinkedList implements Stack, List{
 
     @Override
     public boolean add(Object value) {
-        boolean isSet = false;
         Item item = new Item(value);
         if (head == null) {
             head = item;
-            last = item;
-            isSet = true;
         } else {
             last.next = item;
-            last = item;
-            isSet = true;
         }
-        return isSet;
+        last = item;
+        return true;
     }
 
     @Override
@@ -56,9 +52,8 @@ public class LinkedList implements Stack, List{
                 i++;
             }
             return null;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -82,9 +77,42 @@ public class LinkedList implements Stack, List{
                 i++;
             }
             return null;
-        } else {
-            return null;
         }
+        return null;
     }
 
+    private static class LinkedListIterator implements Iterator {
+        Item next;
+
+        public LinkedListIterator(Item head) {
+            next = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public Object next() {
+            if (!hasNext()) {
+                return null;
+            }
+            Item n = next;
+            next = next.next;
+            return n.value;
+        }
+
+        @Override
+        public void remove() {}
+    }
+
+    private static class Item {
+        Object value;
+        Item next; //ссылка на следующий элемент списка
+
+        Item(Object value) {
+            this.value = value;
+        }
+    }
 }
