@@ -68,6 +68,10 @@ public class ArrayList implements List {
         return true;
     }
 
+    public int getSize() {
+        return currentSize;
+    }
+
     @Override
     public Iterator iterator() {
         return new ArrayListIterator(elementData, currentSize);
@@ -87,7 +91,7 @@ public class ArrayList implements List {
         private int currentSize;
         private int nextIndex;
 
-        public ArrayListIterator(Object[] elementData, int currentSize) {
+        private ArrayListIterator(Object[] elementData, int currentSize) {
             this.elementData = elementData;
             this.currentSize = currentSize;
         }
@@ -110,5 +114,62 @@ public class ArrayList implements List {
         @Override
         public void remove() {
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass().getSuperclass() != obj.getClass().getSuperclass()) {
+            return false;
+        }
+        List list = (List) obj;
+        if (getSize() != list.getSize()) {
+            return false;
+        }
+        Iterator iter1 = iterator();
+        Iterator iter2 = list.iterator();
+        while (iter1.hasNext()) {
+            Object o1 = iter1.next();
+            Object o2 = iter2.next();
+            if (!o1.equals(o2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        int nextIndex = 0;
+        for (Object o : this) {
+            result = 31 * result + o.hashCode();
+            if (elementData[nextIndex] != null) {
+                result = 31 * result + elementData[nextIndex].hashCode();
+            } else {
+                result = 31 * result;
+            }
+            nextIndex++;
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder();
+        strBuild.append("[");
+        int i = 0;
+        for (Object o : this) {
+            if (i == 0) {
+                strBuild.append(o);
+            } else {
+                strBuild.append(", ").append(o);
+            }
+            i++;
+        }
+        strBuild.append("]");
+        return strBuild.toString();
     }
 }

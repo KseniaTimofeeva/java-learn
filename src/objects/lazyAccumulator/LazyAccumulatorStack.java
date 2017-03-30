@@ -1,6 +1,8 @@
 package objects.lazyAccumulator;
 
 import objects.accumulator.Operation;
+import objects.linkedList.LinkedList;
+import objects.linkedList.List;
 import objects.linkedList.Stack;
 
 /**
@@ -23,8 +25,12 @@ public class LazyAccumulatorStack {
     }
 
     public int calculate() {
+        Stack stack2 = new LinkedList();
         Object o;
         while ((o = stack.poll()) != null) {
+            stack2.push(o);
+        }
+        while ((o = stack2.poll()) != null) {
             startValue = ((Item) o).operation.apply(startValue, ((Item) o).value);
         }
         return startValue;

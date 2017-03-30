@@ -8,20 +8,25 @@ import java.util.Random;
 public class MainArrayList {
     public static void main(String[] args) {
         ArrayList arrayList = new ArrayList(5);
+        ArrayList arrayList2 = new ArrayList(5);
+        ArrayList arrayList3 = new ArrayList(5);
 
         Random rnd = new Random();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0, j = 9; i < 10; i++, j--) {
             arrayList.add(rnd.nextInt(20));
+            arrayList2.add(i);
+            arrayList3.add(j);
+
         }
-        UtilityClass.listOutput(arrayList);
+        System.out.println(arrayList.toString());
 
         arrayList.add(2, 6);
         arrayList.add(3, 7);
-        UtilityClass.listOutput(arrayList);
+        System.out.println(arrayList.toString());
 
         arrayList.add(1, 6);
         arrayList.remove(5);
-        UtilityClass.listOutput(arrayList);
+        System.out.println(arrayList.toString());
 
         System.out.println(arrayList.get(0) + " " + arrayList.get(3) + " " + arrayList.get(4) + " " + arrayList.get(5));
 
@@ -43,7 +48,7 @@ public class MainArrayList {
                 return o.toString().length() > 1;
             }
         }, arrayList);
-        UtilityClass.listOutput(filteredList);
+        System.out.println(filteredList.toString());
 
 //        transform
         List transformedList = UtilityClass.transform(new Transformer() {
@@ -52,6 +57,12 @@ public class MainArrayList {
                 return o.toString() + o.toString();
             }
         }, arrayList);
-        UtilityClass.listOutput(transformedList);
+        System.out.println(transformedList.toString());
+
+        System.out.println(arrayList.hashCode());
+        System.out.println(arrayList2.hashCode());
+        System.out.println(arrayList3.hashCode());
+
+
     }
 }

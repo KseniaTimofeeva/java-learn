@@ -6,8 +6,9 @@ import java.util.Iterator;
  * Created by ksenia on 20.03.2017.
  */
 public class LinkedList implements Stack, List {
-    Item head;
-    Item last;
+    private Item head;
+    private Item last;
+    private int size;
 
     @Override
     public Iterator iterator() {
@@ -16,6 +17,7 @@ public class LinkedList implements Stack, List {
 
     @Override
     public Object poll() {
+        size--;
         return remove(0);
     }
 
@@ -24,6 +26,7 @@ public class LinkedList implements Stack, List {
         Item next = head;
         head = new Item(value);
         head.next = next;
+        size++;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class LinkedList implements Stack, List {
             last.next = item;
         }
         last = item;
+        size++;
         return true;
     }
 
@@ -62,6 +66,7 @@ public class LinkedList implements Stack, List {
             if (index == 0) {
                 Item h = head;
                 head = head.next;
+                size--;
                 return h.value;
             }
             int i = 0;
@@ -70,6 +75,7 @@ public class LinkedList implements Stack, List {
             while (item != null) {
                 if (i == index) {
                     prev.next = item.next;
+                    size--;
                     return item.value;
                 }
                 prev = item;
@@ -84,7 +90,7 @@ public class LinkedList implements Stack, List {
     private static class LinkedListIterator implements Iterator {
         Item next;
 
-        public LinkedListIterator(Item head) {
+        private LinkedListIterator(Item head) {
             next = head;
         }
 
@@ -104,7 +110,8 @@ public class LinkedList implements Stack, List {
         }
 
         @Override
-        public void remove() {}
+        public void remove() {
+        }
     }
 
     private static class Item {
@@ -114,5 +121,64 @@ public class LinkedList implements Stack, List {
         Item(Object value) {
             this.value = value;
         }
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass().getSuperclass() != obj.getClass().getSuperclass()) {
+            return false;
+        }
+        List list = (List) obj;
+        if (getSize() != list.getSize()) {
+            return false;
+        }
+        Iterator iter1 = iterator();
+        Iterator iter2 = list.iterator();
+        while (iter1.hasNext()) {
+            Object o1 = iter1.next();
+            Object o2 = iter2.next();
+            if (!o1.equals(o2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        for (Object o : this) {
+            result = 31 * result + o.hashCode();
+            if (last.next != null) {
+                result = 31 * result + last.next.hashCode();
+            } else {
+                result = 31 * result;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder();
+        strBuild.append("[");
+        int i = 0;
+        for (Object o : this) {
+            if (i == 0) {
+                strBuild.append(o);
+            } else {
+                strBuild.append(", ").append(o);
+            }
+            i++;
+        }
+        strBuild.append("]");
+        return strBuild.toString();
     }
 }
