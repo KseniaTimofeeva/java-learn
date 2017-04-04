@@ -12,4 +12,6 @@ public interface List extends Iterable {
 
     int getSize();
 
+    boolean set(int index, Object o);
+
 }

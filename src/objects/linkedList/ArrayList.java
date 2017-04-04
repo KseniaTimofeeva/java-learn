@@ -46,6 +46,15 @@ public class ArrayList implements List {
     }
 
     @Override
+    public boolean set(int index, Object o) {
+        if (index >= currentSize || index < 0) {
+            return false;
+        }
+        elementData[index] = o;
+        return true;
+    }
+
+    @Override
     public Object get(int index) {
         if (index >= currentSize || index < 0) {
             return null;

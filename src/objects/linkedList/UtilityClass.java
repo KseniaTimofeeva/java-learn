@@ -84,12 +84,12 @@ public class UtilityClass {
         return newList;
     }
 
-    //methodFlag = false
+    //intersect = false
     public static List difference(List list1, List list2, Predicate2 predicate2) {
         return diffIntersectNewList(list1, list2, predicate2, false);
     }
 
-    //    methodFlag = true
+    //    intersect = true
     public static List intersect(List list1, List list2, Predicate2 predicate2) {
         return diffIntersectNewList(list1, list2, predicate2, true);
     }
@@ -116,14 +116,14 @@ public class UtilityClass {
         for (Object o : list) {
             if (i == 0) {
                 if (i == list.getSize() - 1) {
-                    strBuild.append(o);
+                    strBuild.append(o.toString());
                 } else {
-                    strBuild.append(o).append(",").append("\n");
+                    strBuild.append(o.toString()).append(",").append("\n");
                 }
             } else if (i == list.getSize() - 1) {
-                strBuild.append(" ").append(o);
+                strBuild.append(" ").append(o.toString());
             } else {
-                strBuild.append(" ").append(o).append(",").append("\n");
+                strBuild.append(" ").append(o.toString()).append(",").append("\n");
             }
             i++;
         }

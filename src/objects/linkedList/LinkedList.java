@@ -87,6 +87,25 @@ public class LinkedList implements Stack, List {
         return null;
     }
 
+    @Override
+    public boolean set(int index, Object o) {
+        boolean isSet = false;
+        if (head != null) {
+            int i = 0;
+            Item item = head;
+
+            while (item != null) {
+                if (i == index) {
+                    isSet = true;
+                    item.value = o;
+                }
+                item = item.next;
+                i++;
+            }
+        }
+        return isSet;
+    }
+
     private static class LinkedListIterator implements Iterator {
         Item next;
 
