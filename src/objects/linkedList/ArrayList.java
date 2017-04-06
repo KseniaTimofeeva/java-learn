@@ -83,7 +83,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ArrayListIterator(elementData, currentSize);
+        return new ArrayListIterator<>(elementData, currentSize);
     }
 
     private void checkCapacity() {
@@ -137,8 +137,8 @@ public class ArrayList<T> implements List<T> {
         if (getSize() != list.getSize()) {
             return false;
         }
-        Iterator<T> iter1 = iterator();
-        Iterator<T> iter2 = list.iterator();
+        Iterator iter1 = iterator();
+        Iterator iter2 = list.iterator();
         while (iter1.hasNext()) {
             Object o1 = iter1.next();
             Object o2 = iter2.next();

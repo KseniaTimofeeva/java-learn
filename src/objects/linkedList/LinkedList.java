@@ -154,12 +154,12 @@ public class LinkedList<T> implements Stack<T>, List<T> {
         if (obj == null || getClass().getSuperclass() != obj.getClass().getSuperclass()) {
             return false;
         }
-        List<T> list = (List<T>) obj;
+        List list = (List) obj;
         if (getSize() != list.getSize()) {
             return false;
         }
-        Iterator<T> iter1 = iterator();
-        Iterator<T> iter2 = list.iterator();
+        Iterator iter1 = iterator();
+        Iterator iter2 = list.iterator();
         while (iter1.hasNext()) {
             Object o1 = iter1.next();
             Object o2 = iter2.next();

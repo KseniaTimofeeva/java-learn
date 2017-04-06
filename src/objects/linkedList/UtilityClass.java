@@ -4,11 +4,11 @@ package objects.linkedList;
  * Created by ksenia on 27.03.2017.
  */
 public class UtilityClass {
-    public static Object find(Predicate pred, List list) {
+    public static <T> T find(Predicate<T> pred, List<T> list) {
         if (list == null) {
             return null;
         }
-        for (Object o : list) {
+        for (T o : list) {
             if (pred.apply(o)) {
                 return o;
             }
@@ -16,12 +16,12 @@ public class UtilityClass {
         return null;
     }
 
-    public static List filter(Predicate pred, List list) {
+    public static <T> List<T> filter(Predicate<T> pred, List<T> list) {
         if (list == null) {
             return null;
         }
-        List newList = getNewList(list);
-        for (Object o : list) {
+        List<T> newList = getNewList(list);
+        for (T o : list) {
             if (pred.apply(o)) {
                 newList.add(o);
             }
@@ -29,25 +29,25 @@ public class UtilityClass {
         return newList;
     }
 
-    public static List transform(Transformer trans, List list) {
+    public static <T, R> List<R> transform(Transformer<T, R> trans, List<T> list) {
         if (list == null) {
             return null;
         }
-        List newList = getNewList(list);
-        for (Object o : list) {
+        List<R> newList = getNewList(list);
+        for (T o : list) {
             newList.add(trans.apply(o));
         }
         return newList;
     }
 
-    private static List getNewList(List list) {
+    private static <T, R> List<R> getNewList(List<T> list) {
         if (list instanceof LinkedList) {
-            return new LinkedList();
+            return new LinkedList<>();
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
-    private static List diffIntersectNewList(List list1, List list2, Predicate2 predicate2, boolean intersect) {
+    private static <T> List<T> diffIntersectNewList(List<T> list1, List<T> list2, Predicate2<T> predicate2, boolean intersect) {
         if (list1 == null) {
             return null;
         }
@@ -57,12 +57,12 @@ public class UtilityClass {
             }
             return list1;
         }
-        List newList = new LinkedList();
+        List<T> newList = new LinkedList<>();
         boolean isEquals;
         boolean condition;
-        for (Object o1 : list1) {
+        for (T o1 : list1) {
             isEquals = false;
-            for (Object o2 : list2) {
+            for (T o2 : list2) {
                 if (predicate2 == null) {
                     condition = o1.equals(o2);
                 } else {
@@ -85,21 +85,21 @@ public class UtilityClass {
     }
 
     //intersect = false
-    public static List difference(List list1, List list2, Predicate2 predicate2) {
+    public static <T> List<T> difference(List<T> list1, List<T> list2, Predicate2<T> predicate2) {
         return diffIntersectNewList(list1, list2, predicate2, false);
     }
 
     //    intersect = true
-    public static List intersect(List list1, List list2, Predicate2 predicate2) {
+    public static <T> List<T> intersect(List<T> list1, List<T> list2, Predicate2<T> predicate2) {
         return diffIntersectNewList(list1, list2, predicate2, true);
     }
 
-    public static List toList(Object[] objects) {
+    public static <T> List<T> toList(T[] objects) {
         if (objects == null) {
             return null;
         }
-        List newList = new LinkedList();
-        for (Object o : objects) {
+        List<T> newList = new LinkedList<>();
+        for (T o : objects) {
             newList.add(o);
         }
         return newList;

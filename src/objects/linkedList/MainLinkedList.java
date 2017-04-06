@@ -46,26 +46,26 @@ public class MainLinkedList {
 
 //        UtilityClass
 //        find
-        System.out.println("find: " + UtilityClass.find(new Predicate() {
+        System.out.println("find: " + UtilityClass.find(new Predicate<Integer>() {
             @Override
-            public boolean apply(Object o) {
-                return (int) o == 3;
+            public boolean apply(Integer o) {
+                return o == 3;
             }
         }, list) + "\n");
 
 //        filter
-        List filteredList = UtilityClass.filter(new Predicate() {
+        List<Integer> filteredList = UtilityClass.filter(new Predicate<Integer>() {
             @Override
-            public boolean apply(Object o) {
+            public boolean apply(Integer o) {
                 return o.toString().length() > 1;
             }
         }, list);
         System.out.println("Filter (length > 1): " + filteredList.toString());
 
 //        transform
-        List transformedList = UtilityClass.transform(new Transformer() {
+        List<String> transformedList = UtilityClass.transform(new Transformer<Integer, String>() {
             @Override
-            public Object apply(Object o) {
+            public String apply(Integer o) {
                 return o.toString() + o.toString();
             }
         }, list);
@@ -86,15 +86,15 @@ public class MainLinkedList {
         System.out.println(list2.toString());
         System.out.println(list4.toString());
 
-        List list5 = UtilityClass.difference(list2, list4, null);
+        List<Integer> list5 = UtilityClass.difference(list2, list4, null);
         System.out.println("diff (null): " + list5.toString());
 
         list5 = UtilityClass.intersect(list2, list4, null);
         System.out.println("ints (null): " + list5.toString());
-        list5 = UtilityClass.intersect(list2, list4, new Predicate2() {
+        list5 = UtilityClass.intersect(list2, list4, new Predicate2<Integer>() {
             @Override
-            public boolean apply(Object o1, Object o2) {
-                return Math.abs((int)o1) == Math.abs((int)o2);
+            public boolean apply(Integer o1, Integer o2) {
+                return Math.abs(o1) == Math.abs(o2);
             }
         });
         System.out.println("ints (abs): " + list5.toString());
@@ -112,51 +112,51 @@ public class MainLinkedList {
         System.out.println("Files");
         File dir1 = new File("d:/javaProjectsTest/dir1");
         File dir2 = new File("d:/javaProjectsTest/dir2");
-        List files1 = UtilityClass.toList(dir1.listFiles());
-        List files2 = UtilityClass.toList(dir2.listFiles());
+        List<File> files1 = UtilityClass.toList(dir1.listFiles());
+        List<File> files2 = UtilityClass.toList(dir2.listFiles());
 
 //        Duplicated files
         System.out.println("Duplicated files by 'name':");
-        UtilityClass.listOutput(UtilityClass.intersect(files1, files2, new Predicate2() {
+        UtilityClass.listOutput(UtilityClass.intersect(files1, files2, new Predicate2<File>() {
             @Override
-            public boolean apply(Object o1, Object o2) {
-                return ((File)o1).getName().equals(((File)o2).getName());
+            public boolean apply(File o1, File o2) {
+                return o1.getName().equals(o2.getName());
             }
         }));
 
         System.out.println("\nDuplicated files by 'name' and '.java':");
-        UtilityClass.listOutput(UtilityClass.intersect(files1, files2, new Predicate2() {
+        UtilityClass.listOutput(UtilityClass.intersect(files1, files2, new Predicate2<File>() {
             @Override
-            public boolean apply(Object o1, Object o2) {
-                return ((File)o1).getName().equals(((File)o2).getName()) && ((File)o1).getName().endsWith(".java") && ((File)o2).getName().endsWith(".java");
+            public boolean apply(File o1, File o2) {
+                return o1.getName().equals(o2.getName()) && o1.getName().endsWith(".java") && o2.getName().endsWith(".java");
             }
         }));
 
 //        Search file
         System.out.println("\nSearch file 'Lektsia_4.pdf':");
-        System.out.println(UtilityClass.find(new Predicate() {
+        System.out.println(UtilityClass.find(new Predicate<File>() {
             @Override
-            public boolean apply(Object o) {
-                return ((File)o).getName().equals("Lektsia_4.pdf");
+            public boolean apply(File o) {
+                return o.getName().equals("Lektsia_4.pdf");
             }
         }, files1) + "\n");
 
 //        Filtered by '.java'
         System.out.println("Filtered by '.java':");
-        UtilityClass.listOutput(UtilityClass.filter(new Predicate() {
+        UtilityClass.listOutput(UtilityClass.filter(new Predicate<File>() {
             @Override
-            public boolean apply(Object o) {
-                return ((File)o).getName().endsWith(".java");
+            public boolean apply(File o) {
+                return o.getName().endsWith(".java");
             }
         }, files1));
         System.out.println();
 
 //        filtered by 'size > 100Kb'
         System.out.println("Filtered by 'size > 100Kb':");
-        UtilityClass.listOutput(UtilityClass.filter(new Predicate() {
+        UtilityClass.listOutput(UtilityClass.filter(new Predicate<File>() {
             @Override
-            public boolean apply(Object o) {
-                return ((File)o).length() > 102400;
+            public boolean apply(File o) {
+                return o.length() > 102400;
             }
         }, files1));
     }

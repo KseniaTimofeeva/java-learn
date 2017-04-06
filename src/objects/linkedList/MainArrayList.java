@@ -33,28 +33,28 @@ public class MainArrayList {
 
         //UtilityClass
 //        find
-        System.out.println("find: " + UtilityClass.find(new Predicate() {
+        System.out.println("find: " + UtilityClass.<Integer>find(new Predicate<Integer>() {
             @Override
-            public boolean apply(Object o) {
-                return (int) o == 3;
+            public boolean apply(Integer o) {
+                return o == 3;
             }
         }, arrayList));
         System.out.println();
 
 //        filter
-        List filteredList = UtilityClass.filter(new Predicate() {
+        List<Integer> filteredList = UtilityClass.filter(new Predicate<Integer>() {
             @Override
-            public boolean apply(Object o) {
+            public boolean apply(Integer o) {
                 return o.toString().length() > 1;
             }
         }, arrayList);
         System.out.println(filteredList.toString());
 
 //        transform
-        List transformedList = UtilityClass.transform(new Transformer() {
+        List<String> transformedList = UtilityClass.transform(new Transformer<Integer, String>() {
             @Override
-            public Object apply(Object o) {
-                return o.toString() + o.toString();
+            public String apply(Integer o) {
+                return Integer.toString(o)  + Integer.toString(o);
             }
         }, arrayList);
         System.out.println(transformedList.toString());
