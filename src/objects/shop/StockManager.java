@@ -7,10 +7,10 @@ import objects.linkedList.List;
  * Created by ksenia on 03.04.2017.
  */
 class StockManager {
-    private List stock;
+    private List<StockRecord> stock;
 
     StockManager() {
-        stock = new ArrayList();
+        stock = new ArrayList<>();
     }
 
     public boolean add(Product product, int qty) {
@@ -21,13 +21,12 @@ class StockManager {
     }
 
     public Product getProduct(int index) {
-        return ((StockRecord) stock.get(index)).product;
+        return stock.get(index).product;
     }
 
     public String stockOutput() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Object o : stock) {
-            StockRecord stockRecord = (StockRecord) o;
+        for (StockRecord stockRecord : stock) {
             if (stockRecord.qty > 0) {
                 stringBuilder.append("{").append(stockRecord.product.toString()).append("\t");
                 stringBuilder.append(stockRecord.qty).append(" шт").append("}\n");
@@ -40,7 +39,7 @@ class StockManager {
         if (product.getId() >= stock.getSize()) {
             return 0;
         }
-        return ((StockRecord) stock.get(product.getId())).qty;
+        return stock.get(product.getId()).qty;
     }
 
     public boolean decreaseProductQty(Product product, int qty) {

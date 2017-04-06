@@ -26,10 +26,7 @@ public class Product {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(id).append("\t").append(name).append("\t");
-        stringBuilder.append(price).append(" руб/шт");
-        return stringBuilder.toString();
+        return id + "\t" + name + "\t" + price + " руб/шт";
     }
 
     @Override

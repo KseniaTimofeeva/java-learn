@@ -23,14 +23,11 @@ public class ShopCommandMenu implements Menu {
         stringBuilder.append("1 - показать корзину/купить\n");
         System.out.println(stringBuilder);
 
-        int n = -1;
         if (sc.hasNextLine()) {
             s = sc.nextLine();
         }
         return s;
     }
-
-
 
     @Override
     public void action(String s) {
@@ -45,7 +42,7 @@ public class ShopCommandMenu implements Menu {
                     MenuHolder.cartMenu.action(MenuHolder.cartMenu.print());
                     break;
                 default:
-                    print();
+                    action(print());
             }
         } else {
             b = Utils.checkRegExp(s, "add\\s(\\d)+\\s(\\d)+");
@@ -58,7 +55,7 @@ public class ShopCommandMenu implements Menu {
                     System.out.println("------------------------");
                 }
             }
-            print();
+            action(print());
         }
     }
 }

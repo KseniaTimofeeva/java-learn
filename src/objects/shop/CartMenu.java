@@ -43,7 +43,7 @@ Shop shop;
                     MenuHolder.shopCommandMenu.action(MenuHolder.shopCommandMenu.print());
                     break;
                 default:
-                    print();
+                    action(print());
             }
         } else {
             b = Utils.checkRegExp(s, "delete\\s(\\d)+\\s(\\d)+");
@@ -54,7 +54,7 @@ Shop shop;
                     System.out.println("Изменения внесены");
                     shop.showCart();
                 }
-                print();
+                action(print());
             } else {
                 b = Utils.checkRegExp(s, "buy\\s(\\d)+(\\.)?(\\d)+");
                 if (b) {
@@ -65,10 +65,10 @@ Shop shop;
                         shop.stockOutput();
                         MenuHolder.shopCommandMenu.action(MenuHolder.shopCommandMenu.print());
                     } else {
-                        print();
+                        action(print());
                     }
                 } else {
-                    print();
+                    action(print());
                 }
             }
         }

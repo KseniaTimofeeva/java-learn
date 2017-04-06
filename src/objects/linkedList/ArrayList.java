@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * Created by ksenia on 25.03.2017.
  */
-public class ArrayList implements List {
+public class ArrayList<T> implements List<T> {
     private int capacity;
     private Object[] elementData;
     private int currentSize;
@@ -25,14 +25,14 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean add(Object object) {
+    public boolean add(T object) {
         checkCapacity();
         elementData[currentSize] = object;
         currentSize++;
         return true;
     }
 
-    public boolean add(int index, Object object) {
+    public boolean add(int index, T object) {
         if (index > currentSize || index < 0) {
             return false;
         }
@@ -46,7 +46,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean set(int index, Object o) {
+    public boolean set(int index, T o) {
         if (index >= currentSize || index < 0) {
             return false;
         }
@@ -55,26 +55,26 @@ public class ArrayList implements List {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         if (index >= currentSize || index < 0) {
             return null;
         }
-        return elementData[index];
+        return (T)elementData[index];
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         if (index >= currentSize || index < 0) {
             return null;
         }
-
+        T result = (T) elementData[index];
         int movedElements = currentSize - index - 1;
         if (movedElements > 0) {
             System.arraycopy(elementData, index + 1, elementData, index, movedElements);
         }
         elementData[currentSize - 1] = null;
         currentSize--;
-        return true;
+        return result;
     }
 
     public int getSize() {
@@ -82,7 +82,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return new ArrayListIterator(elementData, currentSize);
     }
 
@@ -95,7 +95,7 @@ public class ArrayList implements List {
         }
     }
 
-    public static class ArrayListIterator implements Iterator {
+    public static class ArrayListIterator<T> implements Iterator<T> {
         private Object[] elementData;
         private int currentSize;
         private int nextIndex;
@@ -111,13 +111,13 @@ public class ArrayList implements List {
         }
 
         @Override
-        public Object next() {
+        public T next() {
             if (!hasNext()) {
                 return null;
             }
             int n = nextIndex;
             nextIndex++;
-            return elementData[n];
+            return (T)elementData[n];
         }
 
         @Override
@@ -137,8 +137,8 @@ public class ArrayList implements List {
         if (getSize() != list.getSize()) {
             return false;
         }
-        Iterator iter1 = iterator();
-        Iterator iter2 = list.iterator();
+        Iterator<T> iter1 = iterator();
+        Iterator<T> iter2 = list.iterator();
         while (iter1.hasNext()) {
             Object o1 = iter1.next();
             Object o2 = iter2.next();

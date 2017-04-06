@@ -10,7 +10,7 @@ public class TransactionManager {
     private StockManager stockManager;
     private CartsManager cartsManager;
     private Double balance;
-    private List allTransactions;
+    private List<Transaction> allTransactions;
     private Shop shop;
 
     public TransactionManager(Shop shop, StockManager stockManager, CartsManager cartsManager, Double balance) {
@@ -18,11 +18,12 @@ public class TransactionManager {
         this.stockManager = stockManager;
         this.cartsManager = cartsManager;
         this.balance = balance;
-        allTransactions = new LinkedList();
+        allTransactions = new LinkedList<>();
     }
 
     public boolean buy(int userId, int userTotalSum) {
-        if (cartsManager.getUserCart(userId).getSize() == 0) {
+        List<CartsManager.CartRecord> userCart = cartsManager.getUserCart(userId);
+        if (userCart.getSize() == 0) {
             return false;
         }
         double totalSum = cartsManager.getTotalSum(userId);
@@ -31,8 +32,7 @@ public class TransactionManager {
         }
 
         boolean doTransaction = true;
-        for (Object o : cartsManager.getUserCart(userId)) {
-            CartsManager.CartRecord cartRecord = (CartsManager.CartRecord) o;
+        for (CartsManager.CartRecord cartRecord : userCart) {
             int currentCartQty = cartsManager.checkCurrentQty(userId, cartRecord.getProduct());
             int currentStockQty = stockManager.checkCurrentQty(cartRecord.getProduct());
             if (currentCartQty > currentStockQty) {
@@ -54,11 +54,10 @@ public class TransactionManager {
             return false;
         } else {
             boolean temp = true;
-            for (Object o : cartsManager.getUserCart(userId)) {
-                CartsManager.CartRecord cartRecord = (CartsManager.CartRecord) o;
+            for (CartsManager.CartRecord cartRecord : userCart) {
                 temp &= stockManager.decreaseProductQty(cartRecord.getProduct(), cartRecord.getQty());
             }
-            Transaction transaction = new Transaction(userId, cartsManager.getUserCart(userId), totalSum);
+            Transaction transaction = new Transaction(userId, userCart, totalSum);
             temp &= allTransactions.add(transaction);
             balance += totalSum;
             temp &= cartsManager.clearCart(userId);

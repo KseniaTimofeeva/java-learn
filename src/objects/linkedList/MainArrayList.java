@@ -7,9 +7,9 @@ import java.util.Random;
  */
 public class MainArrayList {
     public static void main(String[] args) {
-        ArrayList arrayList = new ArrayList(5);
-        ArrayList arrayList2 = new ArrayList(5);
-        ArrayList arrayList3 = new ArrayList(5);
+        ArrayList<Integer> arrayList = new ArrayList<>(5);
+        ArrayList<Integer> arrayList2 = new ArrayList<>(5);
+        ArrayList<Integer> arrayList3 = new ArrayList<>(5);
 
         Random rnd = new Random();
         for (int i = 0, j = 9; i < 10; i++, j--) {

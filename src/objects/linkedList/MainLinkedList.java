@@ -9,10 +9,10 @@ import java.util.Random;
 public class MainLinkedList {
     public static void main(String[] args) {
 //        LinkedList
-        List list = new LinkedList();
-        List list2 = new LinkedList();
-        List list3 = new LinkedList();
-        List list4 = new LinkedList();
+        List<Integer> list = new LinkedList<>();
+        List<Integer> list2 = new LinkedList<>();
+        List<Integer> list3 = new LinkedList<>();
+        List<Integer> list4 = new LinkedList<>();
 
         Random rnd = new Random();
         for (int i = 0; i < 10; i++) {
@@ -24,7 +24,7 @@ public class MainLinkedList {
         list4.add(-2);
         list4.add(-3);
 
-        ArrayList arrayList = new ArrayList(5);
+        ArrayList<Integer> arrayList = new ArrayList<>(5);
         for (int i = 0; i < 10; i++) {
             arrayList.add(i);
         }
@@ -37,7 +37,7 @@ public class MainLinkedList {
         System.out.println(list.toString());
 
 //        Stack
-        Stack stack = new LinkedList();
+        Stack<Integer> stack = new LinkedList<>();
         for (int i = 10; i < 20; i++) {
             stack.push(i);
         }

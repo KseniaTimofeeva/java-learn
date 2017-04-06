@@ -5,33 +5,33 @@ import java.util.Iterator;
 /**
  * Created by ksenia on 20.03.2017.
  */
-public class LinkedList implements Stack, List {
-    private Item head;
-    private Item last;
+public class LinkedList<T> implements Stack<T>, List<T> {
+    private Item<T> head;
+    private Item<T> last;
     private int size;
 
     @Override
-    public Iterator iterator() {
-        return new LinkedListIterator(head);
+    public Iterator<T> iterator() {
+        return new LinkedListIterator<>(head);
     }
 
     @Override
-    public Object poll() {
+    public T poll() {
         size--;
         return remove(0);
     }
 
     @Override
-    public void push(Object value) {
-        Item next = head;
-        head = new Item(value);
+    public void push(T value) {
+        Item<T> next = head;
+        head = new Item<>(value);
         head.next = next;
         size++;
     }
 
     @Override
-    public boolean add(Object value) {
-        Item item = new Item(value);
+    public boolean add(T value) {
+        Item<T> item = new Item<>(value);
         if (head == null) {
             head = item;
         } else {
@@ -43,10 +43,10 @@ public class LinkedList implements Stack, List {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         if (head != null) {
             int i = 0;
-            Item item = head;
+            Item<T> item = head;
 
             while (item != null) {
                 if (i == index) {
@@ -61,38 +61,38 @@ public class LinkedList implements Stack, List {
     }
 
     @Override
-    public Object remove(int index) {
-        if (head != null) {
-            if (index == 0) {
-                Item h = head;
-                head = head.next;
+    public T remove(int index) {
+        if (head == null) {
+            return null;
+        }
+        if (index == 0) {
+            Item<T> h = head;
+            head = head.next;
+            size--;
+            return h.value;
+        }
+        int i = 0;
+        Item<T> item = head;
+        Item<T> prev = head;
+        while (item != null) {
+            if (i == index) {
+                prev.next = item.next;
                 size--;
-                return h.value;
+                return item.value;
             }
-            int i = 0;
-            Item item = head;
-            Item prev = head;
-            while (item != null) {
-                if (i == index) {
-                    prev.next = item.next;
-                    size--;
-                    return item.value;
-                }
-                prev = item;
-                item = item.next;
-                i++;
-            }
-            return null;
+            prev = item;
+            item = item.next;
+            i++;
         }
         return null;
     }
 
     @Override
-    public boolean set(int index, Object o) {
+    public boolean set(int index, T o) {
         boolean isSet = false;
         if (head != null) {
             int i = 0;
-            Item item = head;
+            Item<T> item = head;
 
             while (item != null) {
                 if (i == index) {
@@ -106,10 +106,10 @@ public class LinkedList implements Stack, List {
         return isSet;
     }
 
-    private static class LinkedListIterator implements Iterator {
-        Item next;
+    private static class LinkedListIterator<T> implements Iterator<T> {
+        Item<T> next;
 
-        private LinkedListIterator(Item head) {
+        private LinkedListIterator(Item<T> head) {
             next = head;
         }
 
@@ -119,11 +119,11 @@ public class LinkedList implements Stack, List {
         }
 
         @Override
-        public Object next() {
+        public T next() {
             if (!hasNext()) {
                 return null;
             }
-            Item n = next;
+            Item<T> n = next;
             next = next.next;
             return n.value;
         }
@@ -133,11 +133,11 @@ public class LinkedList implements Stack, List {
         }
     }
 
-    private static class Item {
-        Object value;
-        Item next; //ссылка на следующий элемент списка
+    private static class Item<T> {
+        T value;
+        Item<T> next; //ссылка на следующий элемент списка
 
-        Item(Object value) {
+        Item(T value) {
             this.value = value;
         }
     }
@@ -154,12 +154,12 @@ public class LinkedList implements Stack, List {
         if (obj == null || getClass().getSuperclass() != obj.getClass().getSuperclass()) {
             return false;
         }
-        List list = (List) obj;
+        List<T> list = (List<T>) obj;
         if (getSize() != list.getSize()) {
             return false;
         }
-        Iterator iter1 = iterator();
-        Iterator iter2 = list.iterator();
+        Iterator<T> iter1 = iterator();
+        Iterator<T> iter2 = list.iterator();
         while (iter1.hasNext()) {
             Object o1 = iter1.next();
             Object o2 = iter2.next();

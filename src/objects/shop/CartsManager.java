@@ -8,16 +8,16 @@ import objects.linkedList.List;
  * Created by ksenia on 02.04.2017.
  */
 class CartsManager {
-    private List allCarts;
+    private List<LinkedList<CartRecord>> allCarts;
     private StockManager stockManager;
 
     CartsManager(StockManager stockManager) {
         this.stockManager = stockManager;
-        allCarts = new ArrayList();
+        allCarts = new ArrayList<>();
     }
 
     public void createCartForNewUser() {
-        allCarts.add(new LinkedList());
+        allCarts.add(new LinkedList<>());
     }
 
     public boolean add(int userId, int productId, int qty) {
@@ -38,15 +38,15 @@ class CartsManager {
         } else {
             setQty = qty;
         }
-        return ((List) allCarts.get(userId)).add(new CartRecord(product, setQty));
+        return allCarts.get(userId).add(new CartRecord(product, setQty));
     }
 
-    public List getUserCart(int userId) {
-        return (List) allCarts.get(userId);
+    public List<CartRecord> getUserCart(int userId) {
+        return allCarts.get(userId);
     }
 
     public boolean set(int userId, Product product, int qty) {
-         return ((List) (allCarts.get(userId))).set(getIndex(userId, product), new CartRecord(product, qty));
+        return allCarts.get(userId).set(getIndex(userId, product), new CartRecord(product, qty));
     }
 
     public boolean delete(int userId, Product product, int qty) {
@@ -61,28 +61,17 @@ class CartsManager {
             return false;
         }
         if (qty >= currentQty) {
-            ((List) (allCarts.get(userId))).remove(getIndex(userId, product));
+            allCarts.get(userId).remove(getIndex(userId, product));
             return true;
         } else {
             int setQty = currentQty - qty;
-            return ((List) (allCarts.get(userId))).set(getIndex(userId, product), new CartRecord(product, setQty));
+            return allCarts.get(userId).set(getIndex(userId, product), new CartRecord(product, setQty));
         }
     }
 
-    public CartRecord getCartRecord(int userId, Product product) {
-        for (Object o : ((List) (allCarts.get(userId)))) {
-            CartRecord cartRecord = (CartRecord) o;
-            if (cartRecord.product.getId() == product.getId()) {
-                return cartRecord;
-            }
-        }
-        return null;
-    }
-
-    public int getIndex(int userId, Product product) {
+    private int getIndex(int userId, Product product) {
         int i = 0;
-        for (Object o : ((List) (allCarts.get(userId)))) {
-            CartRecord cartRecord = (CartRecord) o;
+        for (CartRecord cartRecord : allCarts.get(userId)) {
             if (cartRecord.product.getId() == product.getId()) {
                 return i;
             }
@@ -92,13 +81,12 @@ class CartsManager {
     }
 
     public boolean clearCart(int userId) {
-        return allCarts.set(userId, new LinkedList());
+        return allCarts.set(userId, new LinkedList<>());
     }
 
     public double getTotalSum(int userId) {
         double totalSum = 0;
-        for (Object o : ((List) allCarts.get(userId))) {
-            CartRecord cartRecord = (CartRecord) o;
+        for (CartRecord cartRecord : allCarts.get(userId)) {
             totalSum += cartRecord.product.getPrice() * cartRecord.qty;
         }
         return totalSum;
@@ -108,8 +96,7 @@ class CartsManager {
         StringBuilder stringBuilder = new StringBuilder();
         double totalSum = getTotalSum(userId);
 
-        for (Object o : ((List) allCarts.get(userId))) {
-            CartRecord cartRecord = (CartRecord) o;
+        for (CartRecord cartRecord : allCarts.get(userId)) {
             stringBuilder.append("{").append(cartRecord.product.toString()).append("\t");
             stringBuilder.append(cartRecord.qty).append(" шт").append("\t");
             stringBuilder.append(cartRecord.product.getPrice() * cartRecord.qty).append(" руб}\n");
@@ -120,13 +107,13 @@ class CartsManager {
     }
 
     public int checkCurrentQty(int currentUserId, Product product) {
-        CartRecord cartRecord = getCartRecord(currentUserId, product);
-        if (cartRecord == null) {
-            return 0;
+        for (CartRecord cartRecord : allCarts.get(currentUserId)) {
+            if (cartRecord.product.equals(product)) {
+                return cartRecord.qty;
+            }
         }
-        return cartRecord.qty;
+        return 0;
     }
-
 
     static class CartRecord {
         private Product product;

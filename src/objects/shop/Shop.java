@@ -15,7 +15,7 @@ public class Shop {
         System.out.println("\n------------------------------------");
         System.out.println("Добро пожаловать в Интернет-магазин!");
         System.out.println("------------------------------------");
-        balance = new Double(0);
+        balance = 0d;
     }
 
     public boolean addProduct(Product product, int qty) {
@@ -73,10 +73,5 @@ public class Shop {
         System.out.println("-------------------------------------");
         System.out.println(stockManager.stockOutput());
     }
-
-    public CartsManager getCartsManager() {
-        return cartsManager;
-    }
-
 }
 

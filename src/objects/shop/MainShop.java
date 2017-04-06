@@ -12,7 +12,7 @@ public class MainShop {
             shop.addProduct(new Product("конфета " + i, 10.0), 10);
         }
 
-        menuHolder.mainMenu.action(menuHolder.mainMenu.print());
+        MenuHolder.mainMenu.action(MenuHolder.mainMenu.print());
 
     }
 }
