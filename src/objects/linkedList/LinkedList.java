@@ -9,10 +9,11 @@ public class LinkedList<T> implements Stack<T>, List<T> {
     private Item<T> head;
     private Item<T> last;
     private int size;
+    private int modifications;
 
     @Override
     public Iterator<T> iterator() {
-        return new LinkedListIterator<>(head);
+        return new LinkedListIterator<>(head, modifications);
     }
 
     @Override
@@ -39,11 +40,15 @@ public class LinkedList<T> implements Stack<T>, List<T> {
         }
         last = item;
         size++;
+        modifications++;
         return true;
     }
 
     @Override
     public T get(int index) {
+        if (index >= size || index < 0) {
+            throw new MyIndexOutOfBoundsExeption("Element with index " + index + " not found");
+        }
         if (head != null) {
             int i = 0;
             Item<T> item = head;
@@ -69,6 +74,7 @@ public class LinkedList<T> implements Stack<T>, List<T> {
             Item<T> h = head;
             head = head.next;
             size--;
+            modifications++;
             return h.value;
         }
         int i = 0;
@@ -78,6 +84,7 @@ public class LinkedList<T> implements Stack<T>, List<T> {
             if (i == index) {
                 prev.next = item.next;
                 size--;
+                modifications++;
                 return item.value;
             }
             prev = item;
@@ -97,6 +104,7 @@ public class LinkedList<T> implements Stack<T>, List<T> {
             while (item != null) {
                 if (i == index) {
                     isSet = true;
+                    modifications++;
                     item.value = o;
                 }
                 item = item.next;
@@ -106,11 +114,18 @@ public class LinkedList<T> implements Stack<T>, List<T> {
         return isSet;
     }
 
-    private static class LinkedListIterator<T> implements Iterator<T> {
-        Item<T> next;
+    @Override
+    public int size() {
+        return size;
+    }
 
-        private LinkedListIterator(Item<T> head) {
+    private class LinkedListIterator<T> implements Iterator<T> {
+        Item<T> next;
+        int lastModifications;
+
+        private LinkedListIterator(Item<T> head, int lastModifications) {
             next = head;
+            this.lastModifications = lastModifications;
         }
 
         @Override
@@ -120,6 +135,9 @@ public class LinkedList<T> implements Stack<T>, List<T> {
 
         @Override
         public T next() {
+            if (lastModifications != modifications) {
+                throw new MyConcurrentModificationExeption("List has been changed");
+            }
             if (!hasNext()) {
                 return null;
             }
@@ -142,9 +160,7 @@ public class LinkedList<T> implements Stack<T>, List<T> {
         }
     }
 
-    public int getSize() {
-        return size;
-    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -155,7 +171,7 @@ public class LinkedList<T> implements Stack<T>, List<T> {
             return false;
         }
         List list = (List) obj;
-        if (getSize() != list.getSize()) {
+        if (size() != list.size()) {
             return false;
         }
         Iterator iter1 = iterator();

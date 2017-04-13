@@ -9,6 +9,7 @@ public class ArrayList<T> implements List<T> {
     private int capacity;
     private Object[] elementData;
     private int currentSize;
+    private int modifications;
 
     public ArrayList() {
         capacity = 10;
@@ -29,6 +30,7 @@ public class ArrayList<T> implements List<T> {
         checkCapacity();
         elementData[currentSize] = object;
         currentSize++;
+        modifications++;
         return true;
     }
 
@@ -41,6 +43,7 @@ public class ArrayList<T> implements List<T> {
             System.arraycopy(elementData, index, elementData, index + 1, currentSize - index);
         }
         elementData[index] = object;
+        modifications++;
         currentSize++;
         return true;
     }
@@ -51,13 +54,14 @@ public class ArrayList<T> implements List<T> {
             return false;
         }
         elementData[index] = o;
+        modifications++;
         return true;
     }
 
     @Override
     public T get(int index) {
         if (index >= currentSize || index < 0) {
-            return null;
+            throw new MyIndexOutOfBoundsExeption("Element with index " + index + " not found");
         }
         return (T)elementData[index];
     }
@@ -73,17 +77,13 @@ public class ArrayList<T> implements List<T> {
             System.arraycopy(elementData, index + 1, elementData, index, movedElements);
         }
         elementData[currentSize - 1] = null;
+        modifications++;
         currentSize--;
         return result;
     }
 
-    public int getSize() {
+    public int size() {
         return currentSize;
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return new ArrayListIterator<>(elementData, currentSize);
     }
 
     private void checkCapacity() {
@@ -95,14 +95,21 @@ public class ArrayList<T> implements List<T> {
         }
     }
 
-    public static class ArrayListIterator<T> implements Iterator<T> {
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayListIterator<>(elementData, currentSize, modifications);
+    }
+
+    public class ArrayListIterator<T> implements Iterator<T> {
         private Object[] elementData;
         private int currentSize;
         private int nextIndex;
+        private int lastModifications;
 
-        private ArrayListIterator(Object[] elementData, int currentSize) {
+        private ArrayListIterator(Object[] elementData, int currentSize, int lastModifications) {
             this.elementData = elementData;
             this.currentSize = currentSize;
+            this.lastModifications = lastModifications;
         }
 
         @Override
@@ -112,6 +119,9 @@ public class ArrayList<T> implements List<T> {
 
         @Override
         public T next() {
+            if (lastModifications != modifications) {
+                throw new MyConcurrentModificationExeption("List has been changed");
+            }
             if (!hasNext()) {
                 return null;
             }
@@ -134,7 +144,7 @@ public class ArrayList<T> implements List<T> {
             return false;
         }
         List list = (List) obj;
-        if (getSize() != list.getSize()) {
+        if (size() != list.size()) {
             return false;
         }
         Iterator iter1 = iterator();

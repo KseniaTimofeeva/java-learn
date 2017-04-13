@@ -10,7 +10,7 @@ public interface List<T> extends Iterable<T> {
 
     T remove(int index);
 
-    int getSize();
+    int size();
 
     boolean set(int index, T o);
 

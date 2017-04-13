@@ -115,12 +115,12 @@ public class UtilityClass {
         int i = 0;
         for (Object o : list) {
             if (i == 0) {
-                if (i == list.getSize() - 1) {
+                if (i == list.size() - 1) {
                     strBuild.append(o.toString());
                 } else {
                     strBuild.append(o.toString()).append(",").append("\n");
                 }
-            } else if (i == list.getSize() - 1) {
+            } else if (i == list.size() - 1) {
                 strBuild.append(" ").append(o.toString());
             } else {
                 strBuild.append(" ").append(o.toString()).append(",").append("\n");

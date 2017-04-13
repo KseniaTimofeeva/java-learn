@@ -20,7 +20,7 @@ public class TopWords {
         groupByLength(path);
 
         list = uniqueCombinations(path);
-        topX(list, 10);
+        topX(list, 50);
 
         List<Map.Entry<Character, Double>> list2 = charactersQty(path);
         System.out.println(list2.toString());
@@ -114,14 +114,14 @@ public class TopWords {
                 String[] wordsLine = line.split("\\s");
                 List<String> combinationsInLine = new ArrayList<>();
                 if (!lastWordInPrevLine.isEmpty()) {
-//                    if (lastWordInPrevLine.length() > 2 && !lastWordInPrevLine.equals("the")) {
+                    if (lastWordInPrevLine.length() > 2 && !lastWordInPrevLine.equals("the")) {
                     combinationsInLine.add(lastWordInPrevLine + " " + wordsLine[0]);
-//                    }
+                    }
                 }
                 for (int i = 1; i < wordsLine.length; i++) {
-//                    if (wordsLine[i - 1].length() > 2 && !wordsLine[i - 1].equals("the") && wordsLine[i].length() > 2 && !wordsLine[i].equals("the")) {
+                    if (wordsLine[i - 1].length() > 2 && !wordsLine[i - 1].equals("the") && wordsLine[i].length() > 2 && !wordsLine[i].equals("the")) {
                     combinationsInLine.add(wordsLine[i - 1] + " " + wordsLine[i]);
-//                    }
+                    }
                 }
                 for (String comb : combinationsInLine) {
                     Integer currentQty = uniqueCombinationQty.get(comb);
