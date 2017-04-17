@@ -18,6 +18,9 @@ public class MyInputStream extends InputStream {
         rnd = new Random(256);
         totalEx = 2048;
         this.random = random;
+        if (!random) {
+            saw = -1;
+        }
     }
 
     @Override
@@ -30,10 +33,10 @@ public class MyInputStream extends InputStream {
         if (random) {
             return rnd.nextInt(256);
         } else {
-            int a = saw++;
             if (saw == 127) {
                 saw = 0;
             }
+            int a = ++saw;
             return a;
         }
     }

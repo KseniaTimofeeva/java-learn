@@ -1,6 +1,7 @@
 package objects.ioStream;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * Created by ksenia on 14.04.2017.
@@ -30,6 +31,8 @@ public class IOStreamExamples {
         crypt(file3, cryptFile2, encryptFile2, file1);
 
         System.out.println("'0' = " + zeroBit(file1));
+
+        filterStream(file3);
     }
 
     public static void fileCopy(File file1, File file2) {
@@ -125,7 +128,7 @@ public class IOStreamExamples {
     public static void stream() {
         File fileRandom = new File("D:\\javaProjectsTest\\dir1\\myiostreamRandom.txt");
         File fileSaw = new File("D:\\javaProjectsTest\\dir1\\myiostreamSaw.txt");
-
+/*
         try (MyInputStream in1 = new MyInputStream(true);
              OutputStream out1 = new FileOutputStream(fileRandom);
              MyInputStream in2 = new MyInputStream(false);
@@ -137,6 +140,24 @@ public class IOStreamExamples {
             while ((b = in2.read()) != -1) {
                 out2.write(b);
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }*/
+
+        try (MyInputStream in1 = new MyInputStream(true);
+             ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+             MyInputStream in2 = new MyInputStream(false);
+             ByteArrayOutputStream out2 = new ByteArrayOutputStream()) {
+            int b;
+            while ((b = in1.read()) != -1) {
+                out1.write(b);
+            }
+            while ((b = in2.read()) != -1) {
+                out2.write(b);
+            }
+            System.out.println(Arrays.toString(out1.toByteArray()));
+            System.out.println(Arrays.toString(out2.toByteArray()));
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -215,5 +236,30 @@ public class IOStreamExamples {
         }
 //        System.out.println(sb);
         return sb.length();
+    }
+
+    public static void filterStream(File file) {
+        File filecrypt = new File("D:\\javaProjectsTest\\dir1\\cryptOutputStream.txt");
+        File fileencrypt = new File("D:\\javaProjectsTest\\dir1\\encryptInputStream.txt");
+
+        try (InputStream in = new FileInputStream(file);
+             OutputStream out = new MyCryptOutputStream(new FileOutputStream(filecrypt, false), (byte) 115)) {
+            int b;
+            while ((b = in.read()) != -1) {
+                out.write(b);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        try (InputStream in = new MyEncryptInputStream(new FileInputStream(filecrypt), (byte) 115);
+             OutputStream out = new FileOutputStream(fileencrypt, false)) {
+            int b;
+            while ((b = in.read()) != -1) {
+                out.write(b);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
