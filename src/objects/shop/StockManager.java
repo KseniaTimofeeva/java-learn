@@ -36,7 +36,7 @@ class StockManager {
     }
 
     public int checkCurrentQty(Product product) {
-        if (product.getId() >= stock.getSize()) {
+        if (product.getId() >= stock.size()) {
             return 0;
         }
         return stock.get(product.getId()).qty;

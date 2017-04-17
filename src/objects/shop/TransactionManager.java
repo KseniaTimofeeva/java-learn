@@ -23,7 +23,7 @@ public class TransactionManager {
 
     public boolean buy(int userId, int userTotalSum) {
         List<CartsManager.CartRecord> userCart = cartsManager.getUserCart(userId);
-        if (userCart.getSize() == 0) {
+        if (userCart.size() == 0) {
             return false;
         }
         double totalSum = cartsManager.getTotalSum(userId);

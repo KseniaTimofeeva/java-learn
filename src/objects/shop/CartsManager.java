@@ -24,7 +24,7 @@ class CartsManager {
         if (qty == 0) {
             return false;
         }
-        if (userId >= allCarts.getSize()) {
+        if (userId >= allCarts.size()) {
             return false;
         }
         Product product = stockManager.getProduct(productId);
@@ -50,7 +50,7 @@ class CartsManager {
     }
 
     public boolean delete(int userId, Product product, int qty) {
-        if (userId >= allCarts.getSize()) {
+        if (userId >= allCarts.size()) {
             return false;
         }
         if (qty == 0) {
