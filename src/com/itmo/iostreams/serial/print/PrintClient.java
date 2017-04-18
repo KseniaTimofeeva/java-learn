@@ -94,8 +94,9 @@ public class PrintClient {
         try (Socket sock = new Socket()) {
             sock.connect(serverAddr);
 
-            try (OutputStream out = sock.getOutputStream()) {
-                ObjectOutputStream objOut = new ObjectOutputStream(out);
+            try (OutputStream out = sock.getOutputStream();
+                 ObjectOutputStream objOut = new ObjectOutputStream(out);
+                 ObjectInputStream objIn = new ObjectInputStream(sock.getInputStream())) {
 
                 objOut.writeObject(msg);
 
