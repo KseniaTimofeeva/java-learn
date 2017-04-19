@@ -7,4 +7,8 @@ public interface Command {
     int getCode();
 
     <T extends Command> T getCommand();
+
+    void setAnswer(Object answer);
+
+    Object getAnswer();
 }

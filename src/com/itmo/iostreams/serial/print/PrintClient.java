@@ -146,10 +146,14 @@ public class PrintClient {
                 Object object = objIn.readObject();
                 long end = System.nanoTime();
 
-                if (((Response) object).getCommand().getCode() == 1) {
-                    return end - start;
+                if (object instanceof Command) {
+                    if (((Command) object).getCode() == 1) {
+                        return end - start;
+                    } else {
+                        return ((Command) object).getAnswer();
+                    }
                 } else {
-                    return ((Response) object).getAnswer();
+                    return null;
                 }
             }
         }

@@ -11,6 +11,8 @@ import java.io.ObjectOutput;
 public class ServerTime implements Command, Externalizable {
     private int code;
 
+    private Object answer;
+
     public ServerTime() {
         code = 3;
     }
@@ -21,17 +23,29 @@ public class ServerTime implements Command, Externalizable {
     }
 
     @Override
+    public void setAnswer(Object answer) {
+        this.answer = answer;
+    }
+
+    @Override
+    public Object getAnswer() {
+        return answer;
+    }
+
+    @Override
     public ServerTime getCommand() {
         return this;
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-
+        out.writeInt(code);
+        out.writeObject(answer);
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
+        code = in.readInt();
+        answer = in.readObject();
     }
 }

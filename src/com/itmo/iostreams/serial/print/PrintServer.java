@@ -86,21 +86,21 @@ public class PrintServer {
     }
 
     private void sendPingBack(ObjectOutputStream objOut, Ping ping) throws IOException {
-        Response<Ping> response = new Response<>(ping, null);
-        sendResponse(objOut, response);
+        ping.setAnswer(null);
+        sendResponse(objOut, ping);
     }
 
     private void sendServerTime(ObjectOutputStream objOut, ServerTime serverTime) throws IOException {
-        Response<ServerTime> response = new Response<>(serverTime, new Date());
-        sendResponse(objOut, response);
+        serverTime.setAnswer(new Date());
+        sendResponse(objOut, serverTime);
     }
 
     private void listUsers(ObjectOutputStream objOut, ListUsers listUsers) throws IOException {
-        Response<ListUsers> response = new Response<>(listUsers, allUsers);
-        sendResponse(objOut, response);
+        listUsers.setAnswer(allUsers);
+        sendResponse(objOut, listUsers);
     }
 
-    private void sendResponse(ObjectOutputStream objOut, Response response) throws IOException {
+    private <T extends Command> void sendResponse(ObjectOutputStream objOut, T response) throws IOException {
         objOut.writeObject(response);
         objOut.flush();
     }
