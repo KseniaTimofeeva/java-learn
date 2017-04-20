@@ -19,14 +19,28 @@ public class PrintServer {
 
     private Set<String> allUsers;
 
+    private File allUsersFile;
+
     public PrintServer(int port) {
         this.port = port;
-        allUsers = new HashSet<>();
     }
 
-    private void start() throws IOException {
+    private void start() throws IOException, ClassNotFoundException {
+        allUsersFile = new File("C:\\projects\\java-learn\\serverUsers.bin");
+        if (!allUsersFile.exists()) {
+            allUsersFile.createNewFile();
+        }
         try (ServerSocket ssocket = new ServerSocket(port)) {
             System.out.println("Server started on " + ssocket);
+
+            if (allUsersFile.length() != 0) {
+                try (ObjectInputStream objFIn = new ObjectInputStream(new FileInputStream(allUsersFile))){
+                    allUsers = (HashSet) objFIn.readObject();
+                }
+            }
+            if (allUsers == null) {
+                allUsers = new HashSet<>();
+            }
 
             while (true) {
                 Socket sock = ssocket.accept();
@@ -47,7 +61,7 @@ public class PrintServer {
     private void process(Socket sock) throws IOException, ClassNotFoundException {
         String host = sock.getInetAddress().getHostAddress();
 
-        allUsers.add(host);
+        boolean hasAdded = allUsers.add(host);
 
         try (ObjectInputStream objIn = new ObjectInputStream(sock.getInputStream());
              OutputStream out = sock.getOutputStream();
@@ -71,6 +85,12 @@ public class PrintServer {
                 }
             } else {
                 printMessage((Message) obj, host);
+            }
+            if (hasAdded) {
+                try (FileOutputStream fOut = new FileOutputStream(allUsersFile);
+                     ObjectOutputStream objFOut = new ObjectOutputStream(fOut)) {
+                    objFOut.writeObject(allUsers);
+                }
             }
         } catch (IOException | ClassNotFoundException | RuntimeException e) {
             System.err.println("Failed process connection from: " + host);
@@ -105,7 +125,7 @@ public class PrintServer {
         objOut.flush();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         if (args == null || args.length == 0)
             throw new IllegalArgumentException("Port must be specified");
 
