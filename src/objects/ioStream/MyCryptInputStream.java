@@ -7,20 +7,20 @@ import java.io.InputStream;
 /**
  * Created by ksenia on 17.04.2017.
  */
-public class MyCryptInputStream extends InputStream {
+public class MyCryptInputStream extends FilterInputStream {
     private InputStream in;
     private byte key;
     private byte[] password;
     private int cursor;
 
     public MyCryptInputStream(InputStream in, byte key) {
-//        super(in);
+        super(in);
         this.in = in;
         this.key = key;
     }
 
     public MyCryptInputStream(InputStream in, byte[] password) {
-//        super(in);
+        super(in);
         this.in = in;
         this.password = password;
         cursor = 0;
@@ -40,31 +40,33 @@ public class MyCryptInputStream extends InputStream {
             if (cursor == password.length) {
                 cursor = 0;
             }
-            return b ^ password[c];
+            return (b ^ password[c]) & 0xFF;
         }
     }
 
     @Override
-    public int read(byte[] b) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
 
-        int len = in.read(b);
-        if (len == -1) {
+        int leng = in.read(b, off, len);
+        if (leng == -1) {
             return -1;
         } else {
             if (password == null) {
-                for (int i = 0; i < len; i++) {
+                for (int i = off; i < off + leng; i++) {
                     b[i] ^= key;
+                    b[i] &= 0xFF;
                 }
             } else {
-                for (int i = 0; i < len; i++) {
+                for (int i = off; i < off + leng; i++) {
                     b[i] ^= password[cursor];
+                    b[i] &= 0xFF;
                     cursor++;
                     if (cursor == password.length) {
                         cursor = 0;
                     }
                 }
             }
-            return len;
+            return leng;
         }
     }
 }

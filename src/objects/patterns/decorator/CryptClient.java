@@ -1,5 +1,6 @@
 package objects.patterns.decorator;
 
+import com.itmo.iostreams.serial.print.Message;
 import objects.ioStream.MyCryptInputStream;
 import objects.ioStream.MyCryptOutputStream;
 
@@ -46,10 +47,10 @@ public class CryptClient {
             try (ObjectOutputStream objOut = new ObjectOutputStream(new MyCryptOutputStream(sock.getOutputStream(), password));
                  ObjectInputStream objIn = new ObjectInputStream(new MyCryptInputStream(sock.getInputStream(), password))) {
 
-                objOut.writeObject(msg);
+                objOut.writeObject(new Message(System.currentTimeMillis(), "kkk", msg));
                 objOut.flush();
 
-                System.out.println((String) objIn.readObject());
+                System.out.println(objIn.readObject());
             }
         }
     }
