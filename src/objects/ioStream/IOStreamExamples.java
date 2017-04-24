@@ -242,21 +242,25 @@ public class IOStreamExamples {
         File filecrypt = new File("D:\\javaProjectsTest\\dir1\\cryptOutputStream.txt");
         File fileencrypt = new File("D:\\javaProjectsTest\\dir1\\encryptInputStream.txt");
 
+        byte[] password = "password".getBytes();
+
         try (InputStream in = new FileInputStream(file);
-             OutputStream out = new MyCryptOutputStream(new FileOutputStream(filecrypt, false), (byte) 115)) {
-            int b;
-            while ((b = in.read()) != -1) {
-                out.write(b);
+             OutputStream out = new MyCryptOutputStream(new FileOutputStream(filecrypt, false), password)) {
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) != -1) {
+                out.write(buf, 0, len);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        try (InputStream in = new MyEncryptInputStream(new FileInputStream(filecrypt), (byte) 115);
+        try (InputStream in = new MyCryptInputStream(new FileInputStream(filecrypt), password);
              OutputStream out = new FileOutputStream(fileencrypt, false)) {
-            int b;
-            while ((b = in.read()) != -1) {
-                out.write(b);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) != -1) {
+                out.write(buf, 0, len);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
