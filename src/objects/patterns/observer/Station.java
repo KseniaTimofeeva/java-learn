@@ -1,5 +1,7 @@
 package objects.patterns.observer;
 
+import objects.reflection.toString.StringUtils;
+
 /**
  * Created by ksenia on 24.04.2017.
  */
@@ -64,5 +66,6 @@ public class Station {
 
         Station station = new Station();
         station.checkLevel();
+        System.out.println(StringUtils.toString(station));
     }
 }

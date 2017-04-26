@@ -32,7 +32,7 @@ public class Sensor {
     public void changeTemperature() throws InterruptedException {
         for (int i = 0; i < 30; i++) {
             temperature(Math.sin(i) * i + 2 * i);
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
     }
 
