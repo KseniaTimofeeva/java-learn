@@ -9,7 +9,11 @@ import java.util.AbstractMap;
 /**
  * Created by ksenia on 24.04.2017.
  */
-public class StringUtils {
+public final class StringUtils {
+
+    private StringUtils() {
+
+    }
 
     public static String toString(Object obj) {
 
@@ -52,7 +56,10 @@ public class StringUtils {
                             try {
                                 sb.append("[");
                                 for (int i = 0; i < Array.getLength(field.get(obj)); i++) {
-                                    sb.append(StringUtils.toString(Array.get(field.get(obj), i)));
+                                    if (i != 0) {
+                                        sb.append(", ");
+                                    }
+                                    sb.append(toString(Array.get(field.get(obj), i)));
                                 }
                                 sb.append("]");
                             } catch (IllegalAccessException e) {
@@ -60,7 +67,7 @@ public class StringUtils {
                             }
                         } else {
                             try {
-                                sb.append(StringUtils.toString(field.get(obj)));
+                                sb.append(toString(field.get(obj)));
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
                             }

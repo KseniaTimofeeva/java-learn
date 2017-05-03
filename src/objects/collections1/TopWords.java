@@ -31,10 +31,16 @@ public class TopWords {
         Map<String, Integer> uniqueWordsQty = new HashMap<>();
         File file = new File(path);
         List<String> lines = Files.readAllLines(file.toPath());
+
+//        int wordsqty = 0;
+
         for (String line : lines) {
             line = line.toLowerCase().replaceAll("[\\pP\u00A0=]", " ").replaceAll("\\s+", " ").trim();
             if (line.length() > 0) {
                 String[] wordsLine = line.split("\\s");
+
+//                wordsqty += wordsLine.length;
+
                 for (String word : wordsLine) {
                     if (word.length() > 2) {
                         Integer currentQty = uniqueWordsQty.get(word);
@@ -46,6 +52,8 @@ public class TopWords {
                 }
             }
         }
+
+//        System.out.println("\n" + wordsqty + "\n");
         return descSort(uniqueWordsQty);
     }
 

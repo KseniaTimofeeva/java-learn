@@ -15,6 +15,9 @@ public class Station {
     private Sensor sensor;
     private int currentLevel;
 
+    private int[] a = {0,1,2};
+
+
     public Station() {
         sensor = new Sensor();
         currentLevel = 0;
