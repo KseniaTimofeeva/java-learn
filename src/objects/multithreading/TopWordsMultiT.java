@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static objects.collections1.TopWords.topX;
 
@@ -18,6 +23,11 @@ import static objects.collections1.TopWords.topX;
 public class TopWordsMultiT {
 
     private Map<String, Integer> uniqueWordsQty;
+
+    private BlockingQueue<String> lineQueue = new LinkedBlockingQueue<>();
+    private Queue<Map<String, Integer>> resultQueue = new ConcurrentLinkedQueue<>();
+
+    private static final String STOP = new String();
 
     public TopWordsMultiT() {
         uniqueWordsQty = new HashMap<>();
@@ -31,22 +41,20 @@ public class TopWordsMultiT {
         List<String> lines = Files.readAllLines(file.toPath());
 
         int processors = Runtime.getRuntime().availableProcessors();
-        int qtyLinesToThr = lines.size() / processors;
+
+        for (String line : lines) {
+            topWordsMultiT.lineQueue.offer(line);
+        }
+        topWordsMultiT.lineQueue.offer(STOP);
 
         List<Thread> threads = new ArrayList<>();
 
         for (int i = 0; i < processors; i++) {
-            List<String> subList;
-            if (i != (processors - 1)) {
-                subList = lines.subList(qtyLinesToThr * i, qtyLinesToThr * (i + 1));
-
-            } else {
-                subList = lines.subList(qtyLinesToThr * i, lines.size());
-            }
-            Thread thr = new Thread(topWordsMultiT.new UniqueWordsCounter(subList));
+            Thread thr = new Thread(topWordsMultiT.new UniqueWordsCounter(/*subList*/));
             threads.add(thr);
             thr.start();
         }
+
 
         for (Thread thread : threads) {
             try {
@@ -56,37 +64,55 @@ public class TopWordsMultiT {
                 e.printStackTrace();
             }
         }
-
-
-        topWordsMultiT.printTopWords();
+        topWordsMultiT.integrateAndPrintTopWords();
     }
 
-    private void printTopWords() {
+    private void integrateAndPrintTopWords() {
+        Map<String, Integer> map;
+        while ((map = resultQueue.poll()) != null) {
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                String key = entry.getKey();
+                Integer currentQty = uniqueWordsQty.get(key);
+                if (currentQty == null) {
+                    currentQty = 0;
+                }
+                uniqueWordsQty.put(key, currentQty + entry.getValue());
+            }
+        }
+
         List<Map.Entry<String, Integer>> list = TopWords.descSort(uniqueWordsQty);
         topX(list, 100);
     }
 
-    private class UniqueWordsCounter implements Runnable {
 
-        private List<String> subList;
+    private class UniqueWordsCounter extends Thread {
         private Map<String, Integer> subUniqueWordsQty;
 
-        public UniqueWordsCounter(List<String> subList) {
-            this.subList = subList;
+        public UniqueWordsCounter() {
             subUniqueWordsQty = new HashMap<>();
         }
 
         @Override
         public void run() {
 
-//            int wordsqty = 0;
 
-            for (String line : subList) {
-                line = line.toLowerCase().replaceAll("[\\pP\u00A0=]", " ").replaceAll("\\s+", " ").trim();
-                if (line.length() > 0) {
-                    String[] wordsLine = line.split("\\s");
+            String taskLine = null;
+            while (true) {
+                try {
+                    taskLine = lineQueue.take();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    e.printStackTrace();
+                }
 
-//                    wordsqty += wordsLine.length;
+                if (taskLine == STOP) {
+                    lineQueue.offer(taskLine);
+                    break;
+                }
+
+                taskLine = taskLine.toLowerCase().replaceAll("[\\pP\u00A0=]", " ").replaceAll("\\s+", " ").trim();
+                if (taskLine.length() > 0) {
+                    String[] wordsLine = taskLine.split("\\s");
 
                     for (String word : wordsLine) {
                         if (word.length() > 2) {
@@ -99,22 +125,8 @@ public class TopWordsMultiT {
                     }
                 }
             }
+            resultQueue.offer(subUniqueWordsQty);
 
-//            System.out.println(Thread.currentThread().getName() + " : " + wordsqty);
-
-            addToTop(subUniqueWordsQty);
-        }
-
-
-        private synchronized void addToTop(Map<String, Integer> subUniqueWordsQty) {
-            for (Map.Entry<String, Integer> entry : subUniqueWordsQty.entrySet()) {
-                String key = entry.getKey();
-                Integer currentQty = uniqueWordsQty.get(key);
-                if (currentQty == null) {
-                    currentQty = 0;
-                }
-                uniqueWordsQty.put(key, currentQty + entry.getValue());
-            }
         }
     }
 }
