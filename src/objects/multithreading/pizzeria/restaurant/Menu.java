@@ -1,4 +1,4 @@
-package objects.multithreading.pizzeria;
+package objects.multithreading.pizzeria.restaurant;
 
 import java.util.Random;
 
@@ -13,4 +13,5 @@ public enum Menu {
         Menu[] values = Menu.values();
         return values[rnd.nextInt(values.length)];
     }
+
 }
