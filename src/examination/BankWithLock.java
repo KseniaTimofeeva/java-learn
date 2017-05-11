@@ -4,17 +4,19 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by ksenia on 10.05.2017.
+ * Created by ksenia on 11.05.2017.
  */
-public class Bank {
+public class BankWithLock {
     private Map<Integer, Account> accounts;
     volatile boolean hasNewTransaction = false;
     private Queue<Result> resultQueue;
     private Thread mailerThread;
 
-    public Bank() {
+    public BankWithLock() {
         accounts = new ConcurrentHashMap<>();
         resultQueue = new ConcurrentLinkedQueue<>();
         mailerThread = new MailerThread();
@@ -44,41 +46,50 @@ public class Bank {
         Account acc1 = accounts.get(accId1);
         Account acc2 = accounts.get(accId2);
 
-        Account sync1;
-        Account sync2;
-        if (acc1.id < acc2.id) {
-            sync1 = acc1;
-            sync2 = acc2;
-        } else {
-            sync1 = acc2;
-            sync2 = acc1;
-        }
-        synchronized (sync1) {
-//                    System.out.println("acc1 blocked");
-            synchronized (sync2) {
-//                        System.out.println("acc2 blocked");
-                if (acc1 == null || acc2 == null || amount == 0) {
-                    return false;
-                } else {
-                    resultObj.setBalance1(acc1.balance);
-                    resultObj.setBalance2(acc2.balance);
-                    System.out.println("acc" + accId1 + ": " + acc1.balance + " acc" + accId2 + ": " + acc2.balance + " amount: " + amount);
-                    if (amount < 0) {
-                        if (acc2.balance < Math.abs(amount)) {
+        AccountLocking alock1 = new AccountLocking(acc1);
+        AccountLocking alock2 = new AccountLocking(acc2);
+
+        while (true) {
+            try {
+                if (alock1.lock.tryLock() && alock2.lock.tryLock()) {
+                    if (acc1 == null || acc2 == null || amount == 0) {
+                        return false;
+                    } else {
+                        resultObj.setBalance1(acc1.balance);
+                        resultObj.setBalance2(acc2.balance);
+                        System.out.println("acc" + accId1 + ": " + acc1.balance + " acc" + accId2 + ": " + acc2.balance + " amount: " + amount);
+                        if (amount < 0) {
+                            if (acc2.balance < Math.abs(amount)) {
+                                return false;
+                            }
+                        } else if (acc1.balance < amount) {
                             return false;
                         }
-                    } else if (acc1.balance < amount) {
-                        return false;
-                    }
-                    acc1.setBalance(acc1.getBalance() - amount);
-                    acc2.setBalance(acc2.getBalance() + amount);
+                        acc1.setBalance(acc1.getBalance() - amount);
+                        acc2.setBalance(acc2.getBalance() + amount);
 //                    System.out.println("acc" + accId1 + ": " + acc1.balance + " acc" + accId2 + ": " + acc2.balance);
+                        return true;
+                    }
+                }
+            } finally {
+                if (alock1.lock.isHeldByCurrentThread()) {
+                    alock1.lock.unlock();
+                }
+                if (alock2.lock.isHeldByCurrentThread()) {
+                    alock2.lock.unlock();
                 }
             }
         }
-        return true;
     }
 
+    private class AccountLocking {
+        final ReentrantLock lock = new ReentrantLock();
+        Account account;
+
+        public AccountLocking(Account account) {
+            this.account = account;
+        }
+    }
 
     private static class Account {
         private static int countId;
@@ -159,4 +170,3 @@ public class Bank {
         }
     }
 }
-

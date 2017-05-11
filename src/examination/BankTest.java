@@ -16,6 +16,13 @@ public class BankTest {
             bank.addAccount("User " + i, rnd.nextInt(10000));
         }
 
+        //------------------------------------
+//        BankWithLock bankWithLock = new BankWithLock();
+//        for (int i = 0; i < 100; i++) {
+//            bankWithLock.addAccount("User " + i, rnd.nextInt(10000));
+//        }
+        //------------------------------------
+
         List<Thread> threads = new ArrayList<>();
 
         for (int i = 0; i < 100; i++) {
@@ -23,6 +30,8 @@ public class BankTest {
                 @Override
                 public void run() {
                     bank.transferMoney(rnd.nextInt(10), rnd.nextInt(10), rnd.nextInt(10000));
+//                    bankWithLock.transferMoney(rnd.nextInt(5), rnd.nextInt(5), rnd.nextInt(10000));
+
                 }
             };
             threads.add(thread);
@@ -31,6 +40,8 @@ public class BankTest {
         for (Thread thread : threads) {
             thread.start();
         }
+
+
 
 
     }
